@@ -1,2 +1,10 @@
 [deploy]
 startCommand = "python server.py"
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "python server.py"
+
+[variables]
+NIXPACKS_PYTHON_VERSION = "3.11"
