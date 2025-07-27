@@ -10,7 +10,6 @@ from typing import List
 import uuid
 from datetime import datetime
 
-
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
@@ -24,7 +23,6 @@ app = FastAPI()
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
-
 
 # Define Models
 class StatusCheck(BaseModel):
@@ -44,7 +42,7 @@ async def root():
 async def create_status_check(input: StatusCheckCreate):
     status_dict = input.dict()
     status_obj = StatusCheck(**status_dict)
-    _ = await db.status_checks.insert_one(status_obj.dict())
+    result = await db.status_checks.insert_one(status_obj.dict())
     return status_obj
 
 @api_router.get("/status", response_model=List[StatusCheck])
@@ -73,7 +71,8 @@ logger = logging.getLogger(__name__)
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
+
 if __name__ == '__main__':
-    import os
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    import uvicorn
+    port = int(os.environ.get('PORT', 8000))
+    uvicorn.run(app, host='0.0.0.0', port=port)
