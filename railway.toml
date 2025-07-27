@@ -1,10 +1,8 @@
-[deploy]
-startCommand = "python server.py"
 [build]
 builder = "nixpacks"
 
 [deploy]
-startCommand = "python server.py"
+startCommand = "uvicorn server:app --host 0.0.0.0 --port $PORT"
 
 [variables]
 NIXPACKS_PYTHON_VERSION = "3.11"
